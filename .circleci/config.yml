@@ -2,20 +2,33 @@ version: 2.1
 jobs:
   build-test:
     docker:
-      - image: circleci/node:latest
+      - image: cimg/node:18.17
     steps:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
-      - run: npm ci
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+            - v1-dependencies-
+      - run:
+          name: Install dependencies
+          command: npm ci
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-      - run: npm run test
-      - run: npm run build
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+
+      # 🔒 Audit sécurité
+      - run:
+          name: Security Audit
+          command: npm audit --audit-level=moderate
+
+      - run:
+          name: Run tests
+          command: npm test -- --watchAll=false
+
+      - run:
+          name: Build project
+          command: npm run build
 workflows:
   node-tests:
     jobs:
