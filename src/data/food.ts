@@ -19,12 +19,12 @@ export const FOOD_ITEMS: Array<FoodItem> = [
     imageUrl: Sushi
   },
   {
-    name: "Maki",
+    name: "Maki kiki",
     kcal: 20,
     imageUrl: Maki
   },
   {
-    name: "California",
+    name: "Californication",
     kcal: 35,
     imageUrl: California
   },
